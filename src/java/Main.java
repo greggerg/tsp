@@ -12,13 +12,12 @@ public class Main {
         final String[] problems = {"ch130", "d198", "eil76", "fl1577", "kroA100", "lin318", "pcb442", "pr439", "rat783", "u1060"};
         min = Integer.MAX_VALUE;
         for (seed = 0; seed < Long.MAX_VALUE; seed++) {
-            final ExecutorService service = Executors.newSingleThreadExecutor();
-            Random random = new Random(seed);
+        final ExecutorService service = Executors.newSingleThreadExecutor();
+        Random random = new Random(seed);
 //            for (int i = 0; i < problems.length; i++) {
-            Problem problem = new Problem(problems[0], seed);
-            launchProblem(service, random, problem);
-//            }
-        }
+        Problem problem = new Problem(problems[8], seed);
+        launchProblem(service, random, problem);
+         }
         System.exit(0);
     }
 
@@ -29,7 +28,7 @@ public class Main {
                 problem.solve(random);
                 return "Finished";
             });
-            System.out.println(f.get(3, TimeUnit.SECONDS));
+            System.out.println(f.get(180, TimeUnit.SECONDS));
         } catch (final TimeoutException e) {
             System.out.println("End of 3 minutes");
             Solution solution = problem.getSolution();

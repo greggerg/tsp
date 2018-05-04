@@ -3,9 +3,9 @@ import java.util.Random;
 public class SimulatedAnnealing {
     private final Random random;
     //     1_000_000_000;
-    private double temp = 1_000_000_000;
+    private double temp = 1_000_0000;
     //    0.00001;
-    private static final double coolingRate = 0.00001;
+    private static final double coolingRate = 0.001;
 
     public Solution getSolution() {
         return solution;
@@ -40,9 +40,8 @@ public class SimulatedAnnealing {
                 if (currentDistance < bestDistance) {
                     bestDistance = currentDistance;
                     bestTour = tour;
-                    solution=new Solution(bestTour,bestDistance);
-
-                            System.out.println("NUOVO percorso minimo " + bestDistance);
+                    solution = new Solution(bestTour, bestDistance);
+                    System.out.println("NUOVO percorso minimo " + bestDistance);
                 }
             }
             temp *= 1 - coolingRate;
