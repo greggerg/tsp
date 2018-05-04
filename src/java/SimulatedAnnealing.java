@@ -7,6 +7,12 @@ public class SimulatedAnnealing {
     //    0.00001;
     private static final double coolingRate = 0.00001;
 
+    public Solution getSolution() {
+        return solution;
+    }
+
+    private Solution solution;
+
     public SimulatedAnnealing(Random random) {
         this.random = random;
     }
@@ -34,7 +40,9 @@ public class SimulatedAnnealing {
                 if (currentDistance < bestDistance) {
                     bestDistance = currentDistance;
                     bestTour = tour;
-                    System.out.println("NUOVO percorso minimo " + bestDistance);
+                    solution=new Solution(bestTour,bestDistance);
+
+                            System.out.println("NUOVO percorso minimo " + bestDistance);
                 }
             }
             temp *= 1 - coolingRate;

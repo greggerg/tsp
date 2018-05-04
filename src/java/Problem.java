@@ -13,12 +13,13 @@ public class Problem {
     private int dimension;
     private int best_known;
     private long seed;
+    private SimulatedAnnealing simulatedAnnealing;
 
     Problem(String name, long seed) {
         this.seed = seed;
         this.original = new ArrayList<>(2000);
         this.name = name;
-        this.filename = "C:\\Users\\greg\\tsp\\src\\resources\\" + name + ".tsp";
+        this.filename = "C:\\Users\\meyer\\IdeaProjects\\tsp\\src\\resources\\" + name + ".tsp";
         try {
             readFile();
         } catch (IOException e) {
@@ -30,7 +31,6 @@ public class Problem {
     public void solve(Random random) {
         City[] currentTour = original.toArray(new City[0]);
         int currentCost = Utils.cost(currentTour);
-
         NearestNeighbor nn = new NearestNeighbor(random);
         ArrayList<City> nnTour = nn.solve(original);
         int nnCost = nn.getCost();
@@ -44,20 +44,25 @@ public class Problem {
             currentCost = twoOpt.getDistance();
             currentTour = tOptTour;
         }
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(random);
-        City[] sATour = simulatedAnnealing.solve(currentTour, currentCost);
-        int sACost = Utils.cost(sATour);
-        if (sACost < currentCost) {
-            currentCost = sACost;
-            currentTour = sATour;
-        }
-        Solution solution = new Solution(currentTour, currentCost);
-        try {
-            solution.write(this);
-            solution.writeInfo(this, seed);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        this.simulatedAnnealing = new SimulatedAnnealing(random);
+        //City[] sATour =
+
+                simulatedAnnealing.solve(currentTour, currentCost);
+      //  int sACost = Utils.cost(sATour);
+//        if (sACost < currentCost) {
+//            currentCost = sACost;
+//            currentTour = sATour;
+//        }
+//        Solution solution = new Solution(currentTour, currentCost);
+//        if (currentCost < oldCost) {
+//            oldCost = currentCost;
+//            try {
+//                solution.write(this);
+//                solution.writeInfo(this, seed);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void readFile() throws IOException {
@@ -96,5 +101,11 @@ public class Problem {
 
     public String getName() {
         return name;
+    }
+
+
+
+    public Solution getSolution() {
+        return simulatedAnnealing.getSolution();
     }
 }

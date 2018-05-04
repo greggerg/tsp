@@ -83,7 +83,7 @@ public class TwoOpt {
                 if (gain < 0) {
                     current = wrap(current - 1);
                     visited = 0;
-                    this.distance += gain;
+                    distance += gain;
                     continue;
                 }
                 city.setActive(false);
