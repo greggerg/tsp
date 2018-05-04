@@ -1,34 +1,36 @@
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
+import java.util.concurrent.*;
 
 public class Main {
+    public static void main(final String[] args) {
+        long seed;
+        final String[] problems = {"ch130", "d198", "eil76", "fl1577", "kroA100", "lin318", "pcb442", "pr439", "rat783", "u1060"};
 
-    private static final String FILENAME = "C:\\Users\\greg\\tsp\\src\\resources\\u1060.tsp";
-
-    public static void main(String[] args) {
-        Random random = new Random();
-        Problem problem = new Problem(FILENAME);
-        NearestNeighbor nn = new NearestNeighbor(random);
-
-        ArrayList<City> bestTour = nn.findBestTour(problem, random);
-        System.out.println("nn " + nn.getTotalCost());
-        System.out.println("================================================================BEST TOUR NN ===============================================");
-        City city;
-
-        for (int i = 0; i < bestTour.size(); i++) {
-            city = bestTour.get(i);
-            for (int j = 0; j < bestTour.size(); j++) {
-                if (j != i) {
-                    if (city.getId() == bestTour.get(j).getId())
-                        System.out.println("ERRORE");
-                }
-            }
+        for (seed = 0; seed < Long.MAX_VALUE; seed++) {
+            final ExecutorService service = Executors.newSingleThreadExecutor();
+            Random random = new Random(seed);
+//            for (int i = 0; i < problems.length; i++) {
+                Problem problem = new Problem(problems[9], seed);
+                launchProblem(service, random, problem);
+//            }
         }
-//        for (City c : bestTour) {
-//            System.out.println("city = " + c.getId() + " " + c);
-//        }
+    }
 
+    private static void launchProblem(ExecutorService service, Random random, Problem problem) {
+        try {
+            final Future<Object> f = service.submit(() -> {
+                problem.solve(random);
+                return "Finished";
+            });
+            System.out.println(f.get(180, TimeUnit.SECONDS));
+        } catch (final TimeoutException e) {
+            System.out.println("End of 3 minutes");
+
+        }
+        catch (final Exception e1) {
+            throw new RuntimeException(e1);
+        } finally {
+            service.shutdown();
+        }
     }
 }
